@@ -5,13 +5,13 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: src/handlers/authHandler.handler
-      Runtime: nodejs18.x  # Use the latest version
+      Runtime: nodejs18.x
       CodeUri: .
       MemorySize: 128
       Timeout: 15
       Environment:
         Variables:
-          MONGODB_URI: !Ref MongoDBUri
+          MONGODB_URI: !Sub '{{resolve:secretsmanager:mongodb-uri:SecretString}}'
           JWT_SECRET: !Ref JwtSecret
       Events:
         AuthApi:
@@ -24,9 +24,6 @@ Outputs:
     Description: "Authentication Lambda Function ARN"
     Value: !GetAtt AuthFunction.Arn
 Parameters:
-  MongoDBUri:
-    Type: String
-    Default: "YOUR_MONGODB_ATLAS_CONNECTION_STRING"
   JwtSecret:
     Type: String
     Default: "YOUR_SECRET_KEY"
