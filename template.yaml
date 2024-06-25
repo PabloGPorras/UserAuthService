@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+  AuthFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: src/handlers/authHandler.handler
+      Runtime: nodejs14.x
+      CodeUri: .
+      MemorySize: 128
+      Timeout: 15
+      Environment:
+        Variables:
+          MONGODB_URI: 'YOUR_MONGODB_ATLAS_CONNECTION_STRING'
+          JWT_SECRET: 'YOUR_SECRET_KEY'
+      Policies:
+        - AWSLambdaBasicExecutionRole
+Outputs:
+  AuthFunction:
+    Description: "Authentication Lambda Function ARN"
+    Value: !GetAtt AuthFunction.Arn
