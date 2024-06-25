@@ -5,7 +5,7 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: src/handlers/authHandler.handler
-      Runtime: nodejs18.x  # Update this to the latest version
+      Runtime: nodejs18.x  # Use the latest version
       CodeUri: .
       MemorySize: 128
       Timeout: 15
@@ -13,6 +13,12 @@ Resources:
         Variables:
           MONGODB_URI: !Ref MongoDBUri
           JWT_SECRET: !Ref JwtSecret
+      Events:
+        AuthApi:
+          Type: Api
+          Properties:
+            Path: /auth
+            Method: post
 Outputs:
   AuthFunction:
     Description: "Authentication Lambda Function ARN"
