@@ -5,7 +5,7 @@ let client;
 
 const connectToDatabase = async () => {
   if (!client) {
-    client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(uri, { useUnifiedTopology: true });
     await client.connect();
   }
   return client.db('authDb').collection('users');
