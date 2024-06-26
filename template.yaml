@@ -11,7 +11,7 @@ Resources:
       Timeout: 15
       Environment:
         Variables:
-          MONGODB_URI: !Sub '{{resolve:secretsmanager:mongodb-uri:SecretString}}'
+          MONGODB_URI: !Sub '{{resolve:secretsmanager:mongodb-uri-new:SecretString}}'
           JWT_SECRET: !Ref JwtSecret
       Events:
         AuthApi:
