@@ -1,0 +1,61 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-deploy-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install AWS SAM CLI
+      run: |
+        pip install aws-sam-cli
+
+    - name: Build SAM application
+      run: sam build
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+    - name: Deploy SAM application
+      run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name auth-service-stack --capabilities CAPABILITY_IAM --parameter-overrides JwtSecret=YOUR_SECRET_KEY
+
+    - name: Run tests
+      run: npm test # Adjust this command to your testing setup
+
+    - name: Post-deployment verification
+      run: |
+        curl --location --request POST 'https://<your-api-id>.execute-api.<region>.amazonaws.com/Prod/auth' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{
+            "action": "login",
+            "appId": "cupcakeStore",
+            "username": "johndoe",
+            "password": "password123"
+        }'
