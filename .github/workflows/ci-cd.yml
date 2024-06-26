@@ -51,7 +51,7 @@ jobs:
 
     - name: Post-deployment verification
       run: |
-        curl --location --request POST 'https://<your-api-id>.execute-api.<region>.amazonaws.com/Prod/auth' \
+        curl --location --request POST 'https://hvr2upcoid.execute-api.us-west-1.amazonaws.com/Prod/auth' \
         --header 'Content-Type: application/json' \
         --data-raw '{
             "action": "login",
