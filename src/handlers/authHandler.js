@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.handler = async (event) => {
-  console.log("MONGODB_URI:", process.env.MONGODB_URI); // Log the MongoDB URI
+  console.log("MONGODB_URI:", process.env.MONGODB_URI); // Log the MongoDB URI for debugging
   const { action, appId, username, password } = JSON.parse(event.body);
   const users = await connectToDatabase();
 
